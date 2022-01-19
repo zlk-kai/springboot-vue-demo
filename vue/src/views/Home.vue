@@ -28,7 +28,7 @@
         prop="address"
         label="地址"
     />
-    <el-table-column fixed="right" label="操作" >
+    <el-table-column label="操作" >
       <template #default>
         <el-button type="success" @click="handleClick">编辑</el-button>
         <el-button type="danger" >删除</el-button>
@@ -61,7 +61,7 @@ export default {
   data(){
     return{
       search: '',
-      currentPage: 10,
+      currentPage: 1,
       total: 10,
       tableData: [
         {
