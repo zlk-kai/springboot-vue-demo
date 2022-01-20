@@ -3,13 +3,13 @@
     <!--   功能区-->
     <div style="margin: 10px 0;">
       <el-button type="primary" @click="add">新增</el-button>
-      <el-button type="primary" @click="add">导入</el-button>
-      <el-button type="primary" @click="add">导出</el-button>
+      <el-button type="primary" @click="add">新增</el-button>
+      <el-button type="primary" @click="add">新增</el-button>
     </div>
     <!--    搜索区-->
     <div style="margin: 10px 0;">
-      <el-input v-model="search" style="width: 30%;" placeholder="输入关键字"/>
-      <el-button type="primary" style="margin: 2%;">搜索查询</el-button>
+      <el-input v-model="search" style="width: 30%;" placeholder="输入关键字" clearable/>
+      <el-button type="primary" style="margin: 2%;" @click="load">搜索查询</el-button>
     </div>
     <el-table
         :data="tableData"
@@ -25,7 +25,7 @@
           label="用户名"
       />
       <el-table-column
-          prop="nickName"
+          prop="nickname"
           label="昵称"
       />
       <el-table-column
@@ -41,9 +41,9 @@
           label="地址"
       />
       <el-table-column label="操作">
-        <template #default>
-          <el-button type="success" @click="handleClick">编辑</el-button>
-          <el-button type="danger">删除</el-button>
+        <template #default="scope">
+          <el-button  @click="handleEdit(scope.row)">编辑</el-button>
+          <el-button  type="danger" @click="handleDelete(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -52,7 +52,7 @@
       <el-pagination
           v-model:currentPage="currentPage"
           :page-sizes="[10, 20, 30, 40]"
-          :page-size="10"
+          :page-size="pageSize"
           layout="total, sizes, prev, pager, next, jumper"
           :total="total"
           @size-change="handleSizeChange"
@@ -63,20 +63,20 @@
       <el-dialog v-model="dialogVisible" title="提示" width="30%">
         <el-form :model="form" label-width="120px;">
           <el-form-item label="用户名">
-            <el-input v-model="form.username"></el-input>
+            <el-input v-model="form.username" clearable></el-input>
           </el-form-item>
           <el-form-item label="昵 称">
-            <el-input v-model="form.nickname"></el-input>
+            <el-input v-model="form.nickname" clearable></el-input>
           </el-form-item>
           <el-form-item label="年 龄">
-            <el-input v-model="form.age"></el-input>
+            <el-input v-model="form.age" clearable></el-input>
           </el-form-item>
           <el-form-item label="性 别">
             <el-radio v-model="form.sex" label="1" size="large">男</el-radio>
             <el-radio v-model="form.sex" label="2" size="large">女</el-radio>
           </el-form-item>
           <el-form-item label="地 址">
-            <el-input v-model="form.address"></el-input>
+            <el-input v-model="form.address" clearable></el-input>
           </el-form-item>
         </el-form>
         <template #footer>
@@ -104,20 +104,94 @@ export default {
       dialogVisible: false,
       search: '',
       currentPage: 1,
-      total: 10,
+      pageSize: 10,
+      total: 0,
       tableData: []
     }
   },
+  created() {
+    this.load()
+  },
   methods: {
+    load(){
+      request.get("/user",{
+        params:{
+          pageNum: this.currentPage,
+          pageSize: this.pageSize,
+          search: this.search
+        }
+      }).then(res =>{
+        console.log(res)
+        this.tableData = res.data.records
+        this.total = res.data.total
+      })
+    },
     add() {
       this.dialogVisible = true
       this.form = {}
     },
+    //
     save()  {
-      request.post("/api/user",this.form).then(res =>{
-        console.log(res)
-      })
+      //新增数据
+      if (this.form.id){
+        //更新数据
+        request.put("/user",this.form).then(res =>{
+          console.log(res)
+          if(res.code === '0'){
+            this.$message({
+              type: "success",
+              message: "更新成功"
+            })
+          }else {
+            this.$message({
+              type: "error",
+              message: res.msg
+            })
+          }
+          this.load() //更新表格数据
+          this.dialogVisible = false //关闭弹窗
+        })
+      }else {
+        //新增数据
+        request.post("/user",this.form).then(res =>{
+          console.log(res)
+          if(res.code === '0'){
+            this.$message({
+              type: "success",
+              message: "新增成功"
+            })
+          }else {
+            this.$message({
+              type: "error",
+              message: res.msg
+            })
+          }
+          this.load() //更新表格数据
+          this.dialogVisible = false //关闭弹窗
+        })
+      }
+    },
+    //编辑数据
+    handleEdit(row){
+      //单行赋值
+      this.form = JSON.parse(JSON.stringify(row))
+      this.dialogVisible = true
+    },
+    //删除数据
+    handleDelete(id){},
+    //改变当前每页个数触发
+    handleSizeChange(pageSize){
+      this.pageSize = pageSize
+      this.load()
+    },
+    //改变当前页码触发
+    handleCurrentChange(pageNum){
+      this.currentPage = pageNum
+      this.load()
     }
   }
 }
+
 </script>
+
+
