@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 100%;padding:10px;min-height: calc(100vh - 50px); ">
+  <div style="min-width: calc(100% - 200px);padding:10px;min-height: calc(100vh - 50px); ">
     <!--   功能区-->
     <div style="margin: 10px 0;">
       <el-button type="primary" @click="add">新增</el-button>
@@ -9,7 +9,7 @@
     <!--    搜索区-->
     <div style="margin: 10px 0;">
       <el-input v-model="search" style="width: 30%;" placeholder="输入关键字" clearable/>
-      <el-button type="primary" style="margin: 2%;" @click="load">搜索查询</el-button>
+      <el-button type="primary" style="margin: 1%;" @click="load">查询用户名称</el-button>
     </div>
     <el-table
         :data="tableData"
@@ -43,7 +43,11 @@
       <el-table-column label="操作">
         <template #default="scope">
           <el-button  @click="handleEdit(scope.row)">编辑</el-button>
-          <el-button  type="danger" @click="handleDelete(scope.row.id)">删除</el-button>
+          <el-popconfirm title="确定要删除吗？" @confirm="handleDelete(scope.row.id)">
+            <template #reference>
+              <el-button  type="danger" >删除</el-button>
+            </template>
+          </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>
@@ -142,7 +146,7 @@ export default {
               type: "success",
               message: "更新成功"
             })
-          }else {
+          } else {
             this.$message({
               type: "error",
               message: res.msg
@@ -178,7 +182,23 @@ export default {
       this.dialogVisible = true
     },
     //删除数据
-    handleDelete(id){},
+    handleDelete(id){
+      console.log(id)
+      request.delete("/user/" + id).then(res => {
+        if(res.code === '0'){
+          this.$message({
+            type: "success",
+            message: "删除成功"
+          })
+        }else {
+          this.$message({
+            type: "error",
+            message: res.msg
+          })
+        }
+        this.load() //更新表格数据
+      })
+    },
     //改变当前每页个数触发
     handleSizeChange(pageSize){
       this.pageSize = pageSize

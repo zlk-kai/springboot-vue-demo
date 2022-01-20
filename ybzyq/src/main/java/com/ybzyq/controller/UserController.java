@@ -32,6 +32,12 @@ public class UserController {
         userMapper.updateById(user);
         return Result.success();
     }
+//    删除
+    @DeleteMapping("/{id}")
+    public Result<?> update(@PathVariable Long id){
+        userMapper.deleteById(id);
+        return Result.success();
+    }
 //    模糊查询
     @GetMapping
     public Result<?> findPage(@RequestParam(defaultValue = "1") Integer pageNum,@RequestParam(defaultValue = "10") Integer pageSize,@RequestParam(defaultValue = "") String search){
