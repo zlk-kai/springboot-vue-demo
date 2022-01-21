@@ -7,7 +7,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ybzyq.common.Result;
 import com.ybzyq.entity.User;
 import com.ybzyq.mapper.UserMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -18,6 +17,16 @@ public class UserController {
 
     @Resource
     UserMapper userMapper;
+//  登录
+    @PostMapping("/login")
+    public Result<?> login(@RequestBody User user){
+        User res = userMapper.selectOne(Wrappers.<User>lambdaQuery().eq(User::getUsername, user.getUsername()).eq(User::getPassword, user.getPassword()));
+        if (res == null){
+            return Result.error("-1","用户名或密码错误");
+        }
+            return Result.success();
+    }
+
 //  插入数据
     @PostMapping
     public Result<?> save(@RequestBody User user){

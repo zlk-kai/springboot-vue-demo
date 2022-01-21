@@ -27,9 +27,9 @@
               placeholder="请输入密码"
           />
         </el-form-item>
-        <el-button style="width: 100%;margin-top: 30px;" type="primary">登录</el-button>
+        <el-button style="width: 100%;margin-top: 30px;" type="primary" @click="login">登录</el-button>
         <br>
-        <el-button style="width: 100%;margin-top: 30px;" type="primary" @click="login">注册</el-button>
+        <el-button style="width: 100%;margin-top: 30px;" type="primary">注册</el-button>
       </el-form>
     </div>
   </div>
@@ -38,6 +38,7 @@
 <script>
 import avatar from "@element-plus/icons-vue/dist/es/avatar.mjs";
 import key from "@element-plus/icons-vue/dist/es/lollipop.mjs";
+import request from "../utils/request";
 
 export default {
   name: "Login",
