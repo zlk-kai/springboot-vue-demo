@@ -54,8 +54,8 @@
             <el-input v-model="form.age" clearable></el-input>
           </el-form-item>
           <el-form-item label="性 别">
-            <el-radio v-model="form.sex" label="1" size="large">男</el-radio>
-            <el-radio v-model="form.sex" label="2" size="large">女</el-radio>
+            <el-radio v-model="form.sex" label="男" size="large">男</el-radio>
+            <el-radio v-model="form.sex" label="女" size="large">女</el-radio>
           </el-form-item>
           <el-form-item label="地 址">
             <el-input v-model="form.address" clearable></el-input>

@@ -10,6 +10,7 @@ import com.ybzyq.mapper.UserMapper;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+
 @RestController
 @RequestMapping("/user")
 
@@ -17,44 +18,49 @@ public class UserController {
 
     @Resource
     UserMapper userMapper;
-//  登录
+
+    //  登录
     @PostMapping("/login")
-    public Result<?> login(@RequestBody User user){
+    public Result<?> login(@RequestBody User user) {
         User res = userMapper.selectOne(Wrappers.<User>lambdaQuery().eq(User::getUsername, user.getUsername()).eq(User::getPassword, user.getPassword()));
-        if (res == null){
-            return Result.error("-1","用户名或密码错误");
+        if (res == null) {
+            return Result.error("-1", "用户名或密码错误");
         }
-            return Result.success();
+        return Result.success();
     }
 
-//  插入数据
+    //  插入数据
     @PostMapping
-    public Result<?> save(@RequestBody User user){
-        if (user.getPassword() == null){ user.setPassword("123456"); }
+    public Result<?> save(@RequestBody User user) {
+        if (user.getPassword() == null) {
+            user.setPassword("123456");
+        }
         userMapper.insert(user);
         return Result.success();
     }
 
-//    更新
+    //    更新
     @PutMapping
-    public Result<?> update(@RequestBody User user){
+    public Result<?> update(@RequestBody User user) {
         userMapper.updateById(user);
         return Result.success();
     }
-//    删除
+
+    //    删除
     @DeleteMapping("/{id}")
-    public Result<?> update(@PathVariable Long id){
+    public Result<?> update(@PathVariable Long id) {
         userMapper.deleteById(id);
         return Result.success();
     }
-//    模糊查询
+
+    //    模糊查询
     @GetMapping
-    public Result<?> findPage(@RequestParam(defaultValue = "1") Integer pageNum,@RequestParam(defaultValue = "10") Integer pageSize,@RequestParam(defaultValue = "") String search){
+    public Result<?> findPage(@RequestParam(defaultValue = "1") Integer pageNum, @RequestParam(defaultValue = "10") Integer pageSize, @RequestParam(defaultValue = "") String search) {
         LambdaQueryWrapper<User> wrapper = Wrappers.<User>lambdaQuery();
-        if (StrUtil.isNotBlank(search)){
-            wrapper.like(User::getNickname,search);
+        if (StrUtil.isNotBlank(search)) {
+            wrapper.like(User::getNickname, search);
         }
-        Page<User> userPage = userMapper.selectPage(new Page<>(pageNum,pageSize),wrapper);
+        Page<User> userPage = userMapper.selectPage(new Page<>(pageNum, pageSize), wrapper);
         return Result.success(userPage);
     }
 }
