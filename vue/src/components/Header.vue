@@ -5,15 +5,15 @@
     <div style="width: 10%;">
       <el-dropdown>
     <span class="el-dropdown-link" :prefix="ArrowDown">
-      张三
-      <el-icon class="el-icon--right" >
+      {{ user.username }}
+      <el-icon class="el-icon--right">
         <arrow-down/>
       </el-icon>
     </span>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item divided>个人信息</el-dropdown-item>
-            <el-dropdown-item divided @click="$router.push('/login')">退出登录</el-dropdown-item>
+            <el-dropdown-item @click="$router.push('/person')">个人信息</el-dropdown-item>
+            <el-dropdown-item @click="$router.push('/login')">退出系统</el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
@@ -25,8 +25,22 @@
 
 import {ArrowDown} from '@element-plus/icons-vue'
 
+
 export default {
   name: "Header",
+  props: ['user'],
+
+  data() {
+    return {
+      user: {}
+    }
+  },
+  created() {
+    let userStr = sessionStorage.getItem("user") || "{}"
+    this.user = JSON.parse(userStr)
+
+  },
+
   components: {
     ArrowDown
   }

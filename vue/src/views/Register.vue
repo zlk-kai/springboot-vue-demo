@@ -82,16 +82,16 @@ export default {
   },
   methods: {
     register() {
-      this.$refs[form].validate((valid) => {
-        if (!valid) {
-          if (this.form.password !== this.form.confirm) {
-            this.$message({
-              type: "error",
-              message: '2次输入密码不一致'
-            })
-            return
-          }
 
+      if (this.form.password !== this.form.confirm) {
+        this.$message({
+          type: "error",
+          message: '2次输入密码不一致'
+        })
+        return
+      }
+      this.$refs['form'].validate((valid) => {
+        if (valid) {
           request.post("/user/register", this.form).then(res => {
             console.log(res)
             if (res.code === '0') {

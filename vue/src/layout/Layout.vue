@@ -16,14 +16,14 @@
 
 import Header from "../components/Header";
 import Aside from "../components/Aside";
-import Home from "../views/Home";
+import User from "../views/User";
+import Employee from "../views/Employee";
+import Person from "../views/Person";
 
 export default {
   name: "layout",
-  components:{
-    Header,
-    Aside,
-    Home
+  components: {
+    Header, Aside, User, Employee, Person
   }
 }
 </script>

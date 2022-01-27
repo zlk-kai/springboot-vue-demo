@@ -63,8 +63,8 @@ export default {
   },
   methods: {
     login() {
-      this.$refs[form].validate((valid) => {
-        if (!valid) {
+      this.$refs['form'].validate((valid) => {
+        if (valid) {
           request.post("/user/login", this.form).then(res => {
             console.log(res)
             if (res.code === '0') {
@@ -72,6 +72,7 @@ export default {
                 type: "success",
                 message: "登录成功"
               })
+              sessionStorage.setItem("user",JSON.stringify(res.data))  //缓存用户信息
               this.$router.push("/")  //登录成功后进行页面跳转,跳转到主页
             } else {
               this.$message({

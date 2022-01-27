@@ -9,13 +9,13 @@
     <!--    搜索区-->
     <div style="margin: 10px 0;">
       <el-input v-model="search" style="width: 30%;" placeholder="输入关键字" clearable/>
-      <el-button type="primary" style="margin: 1%;" @click="load">查询用户名称</el-button>
+      <el-button type="primary" style="margin: 2%;" @click="load">查询用户名称</el-button>
     </div>
     <el-table :data="tableData" stripe style="width: 100%">
       <el-table-column prop="id" sortable label="ID"/>
       <el-table-column prop="username" label="用户名"/>
       <el-table-column prop="nickname" label="昵称"/>
-      <el-table-column prop="age" label="年龄"/>
+        <el-table-column prop="age" label="年龄"/>
       <el-table-column prop="sex" label="性别"/>
       <el-table-column prop="address"  label="地址"/>
       <el-table-column label="操作">

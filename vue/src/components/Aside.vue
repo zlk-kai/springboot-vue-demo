@@ -1,20 +1,21 @@
-<template>
+ <template>
   <div>
     <el-menu
         default-active="user"
         class="el-menu-vertical-demo"
         style="width:200px;min-height: calc(100vh - 10%);"
+        router
         @open="handleOpen"
         @close="handleClose"
     >
-      <el-sub-menu index="1">
+      <el-sub-menu index="user">
         <template #title>
           <el-icon><location /></el-icon>
           <span>系统管理</span>
         </template>
         <el-menu-item-group title="分组一">
           <el-menu-item index="user" :route="{path: '/'}">用户管理</el-menu-item>
-          <el-menu-item index="1-2">项目 1-2</el-menu-item>
+          <el-menu-item index="employee">职工管理</el-menu-item>
         </el-menu-item-group>
         <el-menu-item-group title="分组二">
           <el-menu-item index="1-3">项目 1-3</el-menu-item>

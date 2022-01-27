@@ -26,12 +26,30 @@ public class UserController {
         if (res == null) {
             return Result.error("-1", "用户名或密码错误");
         }
+        return Result.success(res);
+    }
+
+    //  注册
+    @PostMapping("/register")
+    public Result<?> Register(@RequestBody User user) {
+        User res = userMapper.selectOne(Wrappers.<User>lambdaQuery().eq(User::getUsername, user.getUsername()));
+        if (res != null) {
+            return Result.error("-1", "用户名重复");
+        }
+        if (user.getPassword() ==null){
+            user.setPassword("123456");
+        }
+        userMapper.insert(user);
         return Result.success();
     }
 
     //  插入数据
     @PostMapping
     public Result<?> save(@RequestBody User user) {
+        User res = userMapper.selectOne(Wrappers.<User>lambdaQuery().eq(User::getUsername, user.getUsername()));
+        if (res != null) {
+            return Result.error("-1", "用户名重复");
+        }
         if (user.getPassword() == null) {
             user.setPassword("123456");
         }
